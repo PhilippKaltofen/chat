@@ -44,6 +44,8 @@ io.on('connection', function(socket){
       msg = msg.split(":").pop();   
       roomName = msg;
       io.emit('server message', "Room Name changed to: " + msg, usersActive, roomName);
+    } else if(msg[0] == '>'){
+      io.emit('>', msg, usersActive, roomName, newUserId);
     } else {
       // Broadcast message
       io.emit('chat message', msg, usersActive, roomName, newUserId);

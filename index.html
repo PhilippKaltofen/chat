@@ -4,6 +4,10 @@
     <title>AlCAPP | anonymous location-based chat app</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="public/style.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/emojione/2.2.7/lib/js/emojione.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/emojione/2.2.7/assets/css/emojione.min.css"/>
   </head>
   <style>
     /* Stylesheet for index.html || ALCAPP */
@@ -15,30 +19,32 @@
       transition: all 0.4s ease-in;
     }
 
+    html {
+      font: 16px 'Roboto'; 
+    }
+
     body { 
-      font: 1em Roboto; 
+      font-size: 1em;
       background: rgb(20,20,20); 
       color: white;
     }
 
     form {      
       position: absolute;
-      margin-bottom: 24px;
-      bottom: 0;
       width: 100%;
+      margin-top: 16px;
     }
 
     #input_message input { 
-      max-width: 800px;
-      width: 90%;
+      width: 100%;
       margin: auto; 
-      background: rgba(20, 20, 20, 0);
+      background: rgba(15, 15, 15, 0);
       border: 0;
-      border-bottom: 2px solid white;
+      border-bottom: 2px solid #00E676;
       color: white;
-      font-size: 1em;
-      padding: 10px 0;
+      padding: 10px 80px 10px 16px;
       word-break: break-word;
+      font-size: 1.2em;
     }
 
     input:focus,
@@ -49,11 +55,35 @@
     }
 
     form button { 
-      width: 9%; 
-      background: rgb(130, 224, 255); 
+      width: 40px;
+      height: 40px;
+      background: #00E676; 
       border: none; 
-      padding: 10px; 
-      display: none;
+      padding: 6px;
+      padding-left: 9px;
+      line-height: 32px;
+      margin-top: -4px;
+      margin-right: 16px;
+      position: absolute;
+      right: 0;
+      border-radius: 50px;      
+      transition: 0.2s ease;
+    }
+
+    form button:hover {
+      margin-top: -8px;
+    }
+
+    form button:active {
+      margin-top: -8px;
+    }
+
+    form button i {      
+      line-height: 1.2em!important;
+      font-size: 1em;
+      font-family: 'Roboto';
+      color: white;      
+      text-align: center;
     }
 
     #messages { 
@@ -82,11 +112,10 @@
     }
 
     .input_area {
-      background: rgb(20,20,20);
-      height: 80px;
+      background: rgb(15,15,15);
+      height: 56px;
       position: fixed;
       bottom: 64px;
-      padding: 16px;
       width: 100%;
       overflow: hidden;
       box-shadow: 0px 0px 5px #111;
@@ -100,7 +129,7 @@
       padding: 0px 16px;
       line-height: 64px;
       color: white;
-      background: rgb(20,20,20);
+      background: rgb(15,15,15);
       text-align: center;
     }
 
@@ -113,8 +142,32 @@
     .highlight:hover {
     }
 
+    body::-webkit-scrollbar {
+      width: 0.2em
+;    }
+     
+    body::-webkit-scrollbar-track {      
+      background-color: rgba(0,0,0,0);
+    }
+     
+    body::-webkit-scrollbar-thumb {
+        background-color: #00E676;
+        outline: 1px solid slategrey;
+    }
+
     .bold {
       font-weight: 900;
+    }
+
+    .quote {
+      color: #789922;
+      background: #ffe;
+    }
+
+    @media ( max-width: 700px ) {
+      body {
+        /* font-size: 1.3em; */
+      }
     }
   </style>
   <body>
@@ -124,9 +177,10 @@
     </section>
     <section class="input_area">
     <form action="" id="input_message">
-      <input type="text" autofocus required id="m" autocomplete="off" /><button>Send</button>
+      <input type="text" autofocus required id="m" autocomplete="off" /><button onclick="convert()"><i class="material-icons">send</i></button>
     </form>
     </section>
+
     <section class="details_area">
       <div class="room_details">
         <span id="users" class="bold">
@@ -143,7 +197,7 @@
 
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>    
       var user_id = 0;
       var user_color = "ff4180";
@@ -160,6 +214,7 @@
         } else if(user_id == newUserId){
           $('#messages').prepend($('<li class="own_message">').html(msg));
         } else {
+          msg = emojione.shortnameToImage(msg);
           $('#messages').prepend($('<li>').html(msg));
         }
         $('#users').text(usersActive);
@@ -170,6 +225,20 @@
         $('#users').text(usersActive);
         $('#roomName').text(roomName);        
       });
+      socket.on('>', function(msg, usersActive, roomName){
+        $('#messages').prepend($('<li class="quote">').html(msg));
+        $('#users').text(usersActive);
+        $('#roomName').text(roomName);        
+      });
+
+      // convert from emoji text to emoji image
+      // https://demos.emojione.com/latest/jsshortnametoimage.html
+      // https://github.com/Ranks/emojione
+      function convert() {
+        var input = document.getElementById('m').value;
+        var output = emojione.shortnameToImage(input);
+        document.getElementById('m').value = output;
+      }
     </script>
   </body>
 </html>
