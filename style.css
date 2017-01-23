@@ -1,0 +1,107 @@
+ /* Stylesheet for index.html || ALCAPP */
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      transition: all 0.4s ease-in;
+    }
+
+    body { 
+      font: 1em Roboto; 
+      background: #fff; 
+      color: #111;
+    }
+
+    form {      
+      position: absolute;
+      margin-bottom: 24px;
+      bottom: 0;
+      width: 100%;
+    }
+
+    #input_message input { 
+      max-width: 800px;
+      width: 90%;
+      margin-right: 5%; 
+      background: rgba(20, 20, 20, 0);
+      border: 0;
+      border-bottom: 2px solid white;
+      color: white;
+      font-size: 1em;
+      padding: 10px 0;
+      word-break: break-word;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus,
+    button:focus {
+        outline: none;
+    }
+
+    form button { 
+      width: 9%; 
+      background: rgb(130, 224, 255); 
+      border: none; 
+      padding: 10px; 
+      display: none;
+    }
+
+    #messages { 
+      list-style-type: none; 
+      margin: 10% 16px; 
+      padding: 0; 
+    }
+
+    #messages li { 
+      padding: 5px 10px; 
+      transition: 0.4s ease-in;
+    }
+
+    .message_area {
+      background: #fff;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .input_area {
+      background: #8BC34A;
+      height: 80px;
+      position: fixed;
+      bottom: 64px;
+      padding: 16px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0px 0px 5px #111;
+    }
+
+    .details_area {      
+      position: fixed;
+      bottom: 0;
+      height: 64px;
+      width: 100%;
+      padding: 0px 16px;
+      line-height: 64px;
+      color: white;
+      background: #33691E;
+      text-align: center;
+    }
+
+    .room_name {
+    }
+
+    .highlight {
+      background: white;
+      color: #33691E;
+      padding: 2px;
+      border-radius: 2px;
+    }
+
+    .highlight:hover {
+      padding: 10px;
+    }
+
+    .bold {
+      font-weight: 900;
+    }

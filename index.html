@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+  <head>
+    <title>AlCAPP | anonymous location-based chat app</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="public/style.css" />
+  </head>
+  <style>
+    /* Stylesheet for index.html || ALCAPP */
+
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      transition: all 0.4s ease-in;
+    }
+
+    body { 
+      font: 1em Roboto; 
+      background: rgb(20,20,20); 
+      color: white;
+    }
+
+    form {      
+      position: absolute;
+      margin-bottom: 24px;
+      bottom: 0;
+      width: 100%;
+    }
+
+    #input_message input { 
+      max-width: 800px;
+      width: 90%;
+      margin: auto; 
+      background: rgba(20, 20, 20, 0);
+      border: 0;
+      border-bottom: 2px solid white;
+      color: white;
+      font-size: 1em;
+      padding: 10px 0;
+      word-break: break-word;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus,
+    button:focus {
+        outline: none;
+    }
+
+    form button { 
+      width: 9%; 
+      background: rgb(130, 224, 255); 
+      border: none; 
+      padding: 10px; 
+      display: none;
+    }
+
+    #messages { 
+      list-style-type: none; 
+      margin: 10% 16px; 
+      padding: 0; 
+    }
+
+    #messages li { 
+      padding: 5px 10px; 
+      transition: 0.4s ease-in;
+    }
+
+    .server_message {
+      color: #999;
+    }
+
+    .own_message {
+      color: #ff4180;
+    }
+
+    .message_area {
+      background: rgb(20,20,20);
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .input_area {
+      background: rgb(20,20,20);
+      height: 80px;
+      position: fixed;
+      bottom: 64px;
+      padding: 16px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0px 0px 5px #111;
+    }
+
+    .details_area {      
+      position: fixed;
+      bottom: 0;
+      height: 64px;
+      width: 100%;
+      padding: 0px 16px;
+      line-height: 64px;
+      color: white;
+      background: rgb(20,20,20);
+      text-align: center;
+    }
+
+    .room_name {
+    }
+
+    .highlight {
+    }
+
+    .highlight:hover {
+    }
+
+    .bold {
+      font-weight: 900;
+    }
+  </style>
+  <body>
+    
+    <section class="message_area">
+      <ul id="messages"></ul>
+    </section>
+    <section class="input_area">
+    <form action="" id="input_message">
+      <input type="text" autofocus required id="m" autocomplete="off" /><button>Send</button>
+    </form>
+    </section>
+    <section class="details_area">
+      <div class="room_details">
+        <span id="users" class="bold">
+          [Active Users]
+        </span> 
+        Guys and Gals in 
+        <span id="roomName" class="highlight">
+          [Room Name]
+        </span>
+        </form>
+
+      </div>
+    </section>
+
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>    
+      var user_id = 0;
+      var user_color = "ff4180";
+      var socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#m').val(), user_id);
+        $('#m').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg, usersActive, roomName, newUserId){
+        if(user_id == 0){
+          user_id = newUserId;
+          $('#messages').prepend($('<li>').html(msg));
+        } else if(user_id == newUserId){
+          $('#messages').prepend($('<li class="own_message">').html(msg));
+        } else {
+          $('#messages').prepend($('<li>').html(msg));
+        }
+        $('#users').text(usersActive);
+        $('#roomName').text(roomName);
+      });
+      socket.on('server message', function(msg, usersActive, roomName){
+        $('#messages').prepend($('<li class="server_message">').html(msg));
+        $('#users').text(usersActive);
+        $('#roomName').text(roomName);        
+      });
+    </script>
+  </body>
+</html>

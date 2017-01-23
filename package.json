@@ -1,0 +1,9 @@
+{
+  "name": "ALCAPP",
+  "version": "0.0.1",
+  "description": "Anyonymous Location-based Chat App",
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^1.7.2"
+  }
+}
