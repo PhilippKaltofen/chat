@@ -1,9 +1,28 @@
 {
-  "name": "ALCAPP",
+  "name": "alcapp",
   "version": "0.0.1",
   "description": "Anyonymous Location-based Chat App",
   "dependencies": {
-    "express": "^4.10.2",
+    "express": "^4.14.0",
     "socket.io": "^1.7.2"
-  }
+  },
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PhilippKaltofen/chat.git"
+  },
+  "keywords": [
+    "chat"
+  ],
+  "author": "philipp-kaltofen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PhilippKaltofen/chat/issues"
+  },
+  "homepage": "https://github.com/PhilippKaltofen/chat#readme"
 }
