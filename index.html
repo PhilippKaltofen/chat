@@ -118,7 +118,7 @@
       bottom: 64px;
       width: 100%;
       overflow: hidden;
-      box-shadow: 0px 0px 5px #111;
+      border-top: 1px solid rgb(10,10,10)
     }
 
     .details_area {      
@@ -133,13 +133,32 @@
       text-align: center;
     }
 
-    .room_name {
+    .help_area {
+      height: 132px;
+      width: 100%;
+      background: rgb(15, 15, 15);
+      position: fixed;
+      bottom: 0;
+      margin-bottom: -132px;
+      padding: 16px;
+      border-top: 2px solid #00E676;
     }
 
-    .highlight {
+    .help_area ul {
+      list-style: none;
     }
 
-    .highlight:hover {
+    .help_area li {
+      padding: 4px 0;
+      width: 100%;
+    }
+
+    .details_area:hover ~ .help_area {
+      margin-bottom: 0px;
+    }
+
+    .help_area:hover {
+      margin-bottom: 0px;
     }
 
     body::-webkit-scrollbar {
@@ -164,6 +183,10 @@
       background: #ffe;
     }
 
+    ::-webkit-input-placeholder {
+      color: rgb(50, 50, 50);
+    }
+
     @media ( max-width: 700px ) {
       body {
         /* font-size: 1.3em; */
@@ -177,7 +200,7 @@
     </section>
     <section class="input_area">
     <form action="" id="input_message">
-      <input type="text" autofocus required id="m" autocomplete="off" /><button onclick="convert()"><i class="material-icons">send</i></button>
+      <input type="text" autofocus required id="m" autocomplete="off" placeholder="write something"/><button onclick="convert()"><i class="material-icons">send</i></button>
     </form>
     </section>
 
@@ -191,8 +214,24 @@
           [Room Name]
         </span>
         </form>
-
       </div>
+    </section>
+
+    <section class="help_area">
+      <ul>
+        <li>
+          <b>Emojis</b> <span style="float: right">:emojiName: :cat: :dog: :100: :joy:</span>
+        </li>
+        <li>
+          <b>Roomname</b> <span style="float: right">rn:roomName</span>
+        </li>
+        <li>
+          <b>Quote</b> <span style="float: right"> > text </span>
+        </li>
+        <li id="help_bot" style="text-align: center">
+          :cat:
+        </li>
+      </ul>
     </section>
 
 
@@ -202,11 +241,26 @@
       var user_id = 0;
       var user_color = "ff4180";
       var socket = io();
+
       $('form').submit(function(){
         socket.emit('chat message', $('#m').val(), user_id);
         $('#m').val('');
         return false;
       });
+
+      $('form').bind('input', function() { 
+        // check if input has changed
+        // convert emoji shortnames to unicode
+        var input = document.getElementById('m').value;
+        var output = emojione.shortnameToUnicode(input);
+        document.getElementById('m').value = output;
+      });
+
+
+      var input = document.getElementById('help_bot').innerHTML;
+      var output = emojione.shortnameToImage(input);
+      document.getElementById('help_bot').innerHTML = output;
+
       socket.on('chat message', function(msg, usersActive, roomName, newUserId){
         if(user_id == 0){
           user_id = newUserId;
@@ -214,7 +268,7 @@
         } else if(user_id == newUserId){
           $('#messages').prepend($('<li class="own_message">').html(msg));
         } else {
-          msg = emojione.shortnameToImage(msg);
+          msg = emojione.unicodeToImage(msg);
           $('#messages').prepend($('<li>').html(msg));
         }
         $('#users').text(usersActive);
@@ -235,8 +289,9 @@
       // https://demos.emojione.com/latest/jsshortnametoimage.html
       // https://github.com/Ranks/emojione
       function convert() {
+        // change emoji unicode to emojione images
         var input = document.getElementById('m').value;
-        var output = emojione.shortnameToImage(input);
+        var output = emojione.unicodeToImage(input);
         document.getElementById('m').value = output;
       }
     </script>
